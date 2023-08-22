@@ -25,6 +25,8 @@ This image also supports having a modded server (using Oxide), check the ```RUST
 The following environment variables are available:
 ```
 RUST_SERVER_STARTUP_ARGUMENTS (DEFAULT: "-batchmode -load -nographics +server.secure 1")
+RUST_SERVER_CRON_WIPE_SCHEDULE (DEFAULT: "" - Cron Wipe Schedule)
+RUST_SERVER_TAGS (DEFAULT: "" - Server Tags)
 RUST_SERVER_IDENTITY (DEFAULT: "docker" - Mainly used for the name of the save directory)
 RUST_SERVER_PORT (DEFAULT: "" - Rust server port 28015 if left blank or numeric value)
 RUST_SERVER_QUERYPORT (DEFAULT: "" - Rust server query port 28016 if left blank or numeric value)

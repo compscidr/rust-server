@@ -214,6 +214,9 @@ function add_argument_pair {
 
 ARGUMENTS=()
 
+add_argument_pair ARGUMENTS "+wipeCronOverride" "RUST_SERVER_CRON_WIPE_SCHEDULE"
+add_argument_pair ARGUMENTS "+server.tags" "RUST_SERVER_TAGS"
+
 add_argument_pair ARGUMENTS "+server.port" "RUST_SERVER_PORT"
 add_argument_pair ARGUMENTS "+server.queryport" "RUST_SERVER_QUERYPORT"
 add_argument_pair ARGUMENTS "+server.identity" "RUST_SERVER_IDENTITY"
