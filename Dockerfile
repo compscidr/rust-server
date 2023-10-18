@@ -1,6 +1,6 @@
 FROM didstopia/base:nodejs-12-steamcmd-ubuntu-18.04
 
-LABEL maintainer="Didstopia <support@didstopia.com>"
+LABEL maintainer="Didstopia <support@didstopia.com> & Zaroxh <admin@rusttilldawn.eu>"
 
 # Fix apt-get warnings
 ARG DEBIAN_FRONTEND=noninteractive
@@ -122,6 +122,8 @@ ENV CHOWN_DIRS "/app,/steamcmd,/usr/share/nginx/html,/var/log/nginx"
 
 # Expose the volumes
 # VOLUME [ "/steamcmd/rust" ]
+
+HEALTHCHECK --start-period=15m CMD rcon test | grep -q 'RconApp::Error' && exit 1
 
 # Start the server
 CMD [ "bash", "/app/start.sh"]
