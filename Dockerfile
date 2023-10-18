@@ -125,7 +125,7 @@ ENV CHOWN_DIRS "/app,/steamcmd,/usr/share/nginx/html,/var/log/nginx"
 
 # Container Healthcheck
 #SHELL ["/bin/bash", "-c"]
-HEALTHCHECK --start-period=15m --retries=2 CMD /bin/sh -c 'if rcon test | grep -q "RconApp::Error"; then exit 1; else exit 0; fi'
+HEALTHCHECK --start-period=15m --retries=2 CMD /bin/sh -c 'if rcon test | grep -q "RconApp::Error"; then echo unhealthy; exit 1; else echo healthy; exit 0; fi'
 
 # Start the server
 CMD [ "bash", "/app/start.sh"]
