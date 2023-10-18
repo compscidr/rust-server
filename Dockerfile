@@ -123,7 +123,7 @@ ENV CHOWN_DIRS "/app,/steamcmd,/usr/share/nginx/html,/var/log/nginx"
 # Expose the volumes
 # VOLUME [ "/steamcmd/rust" ]
 
-HEALTHCHECK --start-period=15m CMD rcon test | grep -q 'RconApp::Error' && exit 1
+HEALTHCHECK --start-period=15m --retries=1 CMD rcon test | grep -q 'RconApp::Error' && exit 1
 
 # Start the server
 CMD [ "bash", "/app/start.sh"]
