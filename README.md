@@ -1,28 +1,40 @@
 # Rust server that runs inside a Docker container
-[![Docker Automated build](https://img.shields.io/docker/automated/didstopia/rust-server.svg)](https://hub.docker.com/r/didstopia/rust-server/)
-[![Docker build status](https://img.shields.io/docker/build/didstopia/rust-server.svg)](https://hub.docker.com/r/didstopia/rust-server/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/didstopia/rust-server.svg)](https://hub.docker.com/r/didstopia/rust-server/)
-[![Docker stars](https://img.shields.io/docker/stars/didstopia/rust-server.svg)](https://hub.docker.com/r/didstopia/rust-server)
+Fork of [Didstopia/rust-server](https://github.com/Didstopia/rust-server)
 
-**DISCLAIMER:**
+This fork adds a healthcheck and more environment variables to set (see below for a full list).
+
+## docker-compose.yml
 ```
-Cracked or pirated versions of Rust are not supported in any way, shape or form. Please do not post issues regarding these.
+services:
+  rust-server:
+    container_name: rust-server
+    image: ghcr.io/zaroxh/rust-server:master
+    restart: unless-stopped
+    ports:
+      - 28015:28015/tcp
+      - 28015:28015/udp
+      - 28016:28016/tcp
+      - 28016:28016/udp
+      - 28017:28017/tcp
+      - 28017:28017/udp
+      - 28082:28082/tcp
+      - 28082:28082/udp
+    volumes:
+      - ./rust-server/:/steamcmd/rust
+    environment:
+      - RUST_SERVER_IDENTITY=rust-server
+      - RUST_SERVER_NAME=[EU] Rust Server running in Docker Container
+      - RUST_SERVER_DESCRIPTION=Some good server description
+      - RUST_SERVER_MAXPLAYERS=50
+      - RUST_SERVER_CRON_WIPE_SCHEDULE=0 19 * * 4
+      - RUST_SERVER_STARTUP_ARGUMENTS=-batchmode -load -nographics -swnet +server.tags weekly,EU +server.secure 1 +wipeTimezone Europe/Berlin
+      - RUST_UPDATE_CHECKING=1
+      - RUST_OXIDE_ENABLED=1
+      - RUST_HEARTBEAT=1
+      - TZ=Europe/Berlin
 ```
 
----
-
-**TUTORIAL**: We've written a guide on how to use this image [here](http://rust.didscraft.com/rust-server-on-linux-using-docker/).
-
-**NOTE**: This image will install/update on startup. The path ```/steamcmd/rust``` can be mounted on the host for data persistence.
-Also note that this image provides the new web-based RCON, so you should set ```RUST_RCON_PASSWORD``` to a more secure password.
-This image also supports having a modded server (using Oxide), check the ```RUST_OXIDE_ENABLED``` variable below.
-
-# How to run the server
-1. Set the environment variables you wish to modify from below (note the RCON password!)
-2. Optionally mount ```/steamcmd/rust``` somewhere on the host or inside another container to keep your data safe
-3. Enjoy!
-
-The following environment variables are available:
+## Environment variables
 ```
 RUST_SERVER_STARTUP_ARGUMENTS (DEFAULT: "-batchmode -load -nographics +server.secure 1")
 RUST_SERVER_CRON_WIPE_SCHEDULE (DEFAULT: "" - Cron Wipe Schedule)
@@ -51,29 +63,3 @@ RUST_OXIDE_UPDATE_ON_BOOT (DEFAULT: "1" - Set to 0 to disable automatic update o
 RUST_RCON_SECURE_WEBSOCKET (DEFAULT: "0" - Set to 1 to enable secure websocket connections to the RCON web interface)
 RUST_HEARTBEAT (DEFAULT: "0" - Set to 1 to enable the heartbeat service which will forcibly quit the server if it becomes unresponsive to queries)
 ```
-
-# Logging and rotating logs
-
-The image now supports log rotation, and all you need to do to enable it is to remove any `-logfile` arguments from your startup arguments.
-Log files will be created under `logs/` with the server identity and the current date and time.
-When the server starts up or restarts, it will move old logs to `logs/archive/`.
-
-# How to send or receive command to/from the server
-
-We recently added a small application, called *rcon*, that can both send and receive messages to the server, much like the console on the Windows version, but this happens to use RCON (webrcon).
-To use it, simply run the following on the host: `docker exec rust-server rcon say Hello World`, substituting *rust-server* for your own container name.
-
-# Rust+ companion app support
-
-The image sets up `app.port` to `28082` by default, but you can optionally override this with the `RUST_APP_PORT` environment variable.  
-If you need to set additional options, such as `app.listenip` or `app.publicip`, you can supply these to `RUST_SERVER_STARTUP_ARGUMENTS` environment variable, but be careful to also include the default values.  
-More information on the Rust+ companion app integration can be found [here](https://wiki.facepunch.com/rust/rust-companion-server).
-
-# Troubleshooting
-
-  - If the server exits by itself after seemingly starting up fine, make sure the Docker VM has at least 4GB of RAM.
-  - If you can connect to the RCON web UI, but not the game itself, make sure you've exposed port 28015 as UDP, not TCP.
-
-# Anything else
-
-If you need help, have questions or bug submissions, feel free to contact me **@Dids** on Twitter, and on the *Rust Server Owners* Slack community.
