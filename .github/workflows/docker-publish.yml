@@ -22,7 +22,6 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
       - name: Build and Publish Base Image
         run: |
-          cd openshift/wps-api-base/docker
           docker build . --tag ghcr.io/compscidr/rust-server:$(date +%m-%d-%Y)
           docker tag ghcr.io/compscidr/rust-server:$(date +%m-%d-%Y) ghcr.io/compscidr/rust-server:latest
           docker push ghcr.io/compscidr/rust-server:$(date +%m-%d-%Y)
