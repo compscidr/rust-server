@@ -8,7 +8,7 @@ This fork adds a healthcheck and more environment variables to set (see below fo
 services:
   rust-server:
     container_name: rust-server
-    image: ghcr.io/zaroxh/rust-server:master
+    image: ghcr.io/compscidr/rust-server
     restart: unless-stopped
     ports:
       - 28015:28015/tcp
