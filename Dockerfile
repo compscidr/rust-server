@@ -1,6 +1,6 @@
-FROM didstopia/base:nodejs-12-steamcmd-ubuntu-18.04
+FROM didstopia/base:nodejs-16-steamcmd-ubuntu-20.04
 
-LABEL maintainer="Didstopia <support@didstopia.com> & Zaroxh <admin@rusttilldawn.eu>"
+LABEL org.opencontainers.image.source="https://github.com/compscidr/rust-server"
 
 # Fix apt-get warnings
 ARG DEBIAN_FRONTEND=noninteractive
