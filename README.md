@@ -1,5 +1,5 @@
 # Rust server that runs inside a Docker container
-Fork of [Didstopia/rust-server](https://github.com/Didstopia/rust-server)
+Fork of [zaroxh/rust-server](https://github.com/zaroxh/rust-server) and [Didstopia/rust-server](https://github.com/Didstopia/rust-server)
 
 This fork adds a healthcheck and more environment variables to set (see below for a full list).
 
