@@ -30,6 +30,7 @@ services:
       - 28082:28082/udp
     volumes:
       - ./rust-server/:/steamcmd/rust
+      - ./rust.env:/etc/rust/rust.env
     environment:
       - RUST_SERVER_IDENTITY=rust-server
       - RUST_SERVER_NAME=[EU] Rust Server running in Docker Container
