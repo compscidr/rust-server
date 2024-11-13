@@ -8,6 +8,8 @@
 # quotes
 set -o allexport
 source /etc/rust/rust.env
+# lets you split the seed into a separate config file to make wipes easier
+source /etc/rust/seed.env
 set +o allexport
 
 # Print the user we're currently running as

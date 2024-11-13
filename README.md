@@ -8,7 +8,12 @@ the docker volume. This has made it easier for me to manage wipe seeds with
 a cron job on the host that changes the .env value and restarts the container.
 I found if you run containers via ansible and pass the .env file, restarting
 the container will keep the same old values from when it was originally run.
-This setup allows overriding anything passed in from docker.
+This setup allows overriding anything passed in from docker. The config file
+is located at `/etc/rust/rust.env` in the container. You can map a volume
+locally to the file for peristence.
+
+I also split the seed into its own .env file at `/etc/rust/seed.env` to make
+it easier to update configs without affecting the map.
 
 For an example see the `docker-compose.yml` file.
 

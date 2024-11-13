@@ -17,3 +17,4 @@ services:
     volumes:
       - ./rust-server/:/steamcmd/rust
       - ./rust.env:/etc/rust/rust.env
+      - ./seed.env:/etc/rust/seed.env
