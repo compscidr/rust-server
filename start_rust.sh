@@ -4,7 +4,11 @@
 # set -x
 
 # import env variables from /etc/rust/rust.env
-export $(grep -v '^#' /etc/rust/rust.env | xargs -d '\n')
+# handles multi-line and variables with spaces if they use
+# quotes
+set -o allexport
+source /etc/rust/rust.env
+set +o allexport
 
 # Print the user we're currently running as
 echo "Running as user: $(whoami)"
