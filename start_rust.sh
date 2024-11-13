@@ -3,13 +3,16 @@
 # Enable debugging
 # set -x
 
+# import env variables from /etc/rust/rust.env
+export $(grep -v '^#' /etc/rust/rust.env | xargs -d '\n')
+
 # Print the user we're currently running as
 echo "Running as user: $(whoami)"
 
 # Define the exit handler
 exit_handler()
 {
-	echo "Shutdown signal received"
+	echo "Shutdown signal received" 
 
 	# Execute the RCON shutdown command
 	node /app/shutdown_app/app.js

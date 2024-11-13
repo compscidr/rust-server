@@ -3,6 +3,15 @@ Fork of [zaroxh/rust-server](https://github.com/zaroxh/rust-server) and [Didstop
 
 This fork adds a healthcheck and more environment variables to set (see below for a full list).
 
+It also lets you override the environment variables with an .env file on
+the docker volume. This has made it easier for me to manage wipe seeds with
+a cron job on the host that changes the .env value and restarts the container.
+I found if you run containers via ansible and pass the .env file, restarting
+the container will keep the same old values from when it was originally run.
+This setup allows overriding anything passed in from docker.
+
+For an example see the `docker-compose.yml` file.
+
 ## docker-compose.yml
 ```
 services:

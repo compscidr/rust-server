@@ -45,3 +45,5 @@ man/man5
 man/man8
 pyenv
 vendor/pkg/
+
+rust-server

@@ -1,0 +1,19 @@
+services:
+  rust-server:
+    container_name: rust-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 26015:28015/tcp
+      - 26015:28015/udp
+      - 26016:28016/tcp
+      - 26016:28016/udp
+      - 26017:28017/tcp
+      - 26017:28017/udp
+      - 26082:28082/tcp
+      - 26082:28082/udp
+    volumes:
+      - ./rust-server/:/steamcmd/rust
+      - ./rust.env:/etc/rust/rust.env
