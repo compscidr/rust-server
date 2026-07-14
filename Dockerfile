@@ -1,4 +1,5 @@
-FROM didstopia/base:nodejs-16-steamcmd-ubuntu-20.04
+# nodejs-22-steamcmd-ubuntu-24.04 (Ubuntu 24.04, glibc 2.39, node 22) pinned by digest
+FROM didstopia/base:nodejs-22-steamcmd-ubuntu-24.04@sha256:ae8f7bdab405f669eadcc7178627dd47def015e22227247547904b22156f5a47
 
 LABEL org.opencontainers.image.source="https://github.com/compscidr/rust-server"
 
@@ -35,27 +36,27 @@ RUN mkdir -p /steamcmd/rust /usr/share/nginx/html /var/log/nginx
 # Setup proper shutdown support
 ADD shutdown_app/ /app/shutdown_app/
 WORKDIR /app/shutdown_app
-RUN npm install
+RUN npm ci
 
 # Setup restart support (for update automation)
 ADD restart_app/ /app/restart_app/
 WORKDIR /app/restart_app
-RUN npm install
+RUN npm ci
 
 # Setup scheduling support
 ADD scheduler_app/ /app/scheduler_app/
 WORKDIR /app/scheduler_app
-RUN npm install
+RUN npm ci
 
 # Setup scheduling support
 ADD heartbeat_app/ /app/heartbeat_app/
 WORKDIR /app/heartbeat_app
-RUN npm install
+RUN npm ci
 
 # Setup rcon command relay app
 ADD rcon_app/ /app/rcon_app/
 WORKDIR /app/rcon_app
-RUN npm install
+RUN npm ci
 RUN ln -s /app/rcon_app/app.js /usr/bin/rcon
 
 # Add the steamcmd installation script
