@@ -1,4 +1,4 @@
-FROM didstopia/base:nodejs-16-steamcmd-ubuntu-20.04
+FROM didstopia/base:nodejs-22-steamcmd-ubuntu-24.04
 
 LABEL org.opencontainers.image.source="https://github.com/compscidr/rust-server"
 
