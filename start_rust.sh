@@ -39,15 +39,30 @@ trap 'exit_handler' SIGINT SIGTERM
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steamcmd/rust/RustDedicated_Data/Plugins/x86_64
 
 # Define the install/update function
+#
+# steamcmd's exit status says nothing about whether app_update worked. On 2026-09-03 it
+# printed "Error! App '258550' state is 0x486 after update job." (Facepunch's monthly
+# depot was mid-rollout at the moment the server restarted) and exited 0; this script
+# carried on, installed an Oxide built for the NEW Rust over the OLD one, and RustDedicated
+# hung at boot with a MissingMethodException. A hang is not an exit, so the container's
+# restart policy never fired, and both servers stayed down for five days.
+#
+# So the only proof accepted is steamcmd's own success line. Anything else exits non-zero
+# BEFORE the Oxide step, the restart policy brings the container back, and the loop
+# converges once Steam serves the update. The delay keeps that loop from hitting Steam
+# every ~20s: docker resets its restart backoff for any container that ran over 10s.
+# STEAMCMD_SH and STEAMCMD_RETRY_DELAY exist so test/install_or_update_test.sh can
+# stub the binary and skip the wait.
 install_or_update()
 {
 	# Install Rust from install.txt
 	echo "Installing or updating Rust.. (this might take a while, be patient)"
-	bash /steamcmd/steamcmd.sh +runscript /app/install.txt
+	bash "${STEAMCMD_SH:-/steamcmd/steamcmd.sh}" +runscript /app/install.txt 2>&1 | tee /tmp/steamcmd_update.log
 
-	# Terminate if exit code wasn't zero
-	if [ $? -ne 0 ]; then
-		echo "Exiting, steamcmd install or update failed!"
+	# Terminate unless steamcmd reported a successful install (also printed when already up to date)
+	if ! grep -q "Success! App '258550' fully installed" /tmp/steamcmd_update.log; then
+		echo "Exiting, steamcmd install or update failed! Retrying in ${STEAMCMD_RETRY_DELAY:-60}s.."
+		sleep "${STEAMCMD_RETRY_DELAY:-60}"
 		exit 1
 	fi
 }

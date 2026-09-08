@@ -73,8 +73,27 @@ RUST_BRANCH (DEFAULT: Not set - Sets the branch argument to use, eg. set to "-be
 RUST_UPDATE_CHECKING (DEFAULT: "0" - Set to 1 to enable fully automatic update checking, notifying players and restarting to install updates)
 RUST_UPDATE_BRANCH (DEFAULT: "public" - Set to match the branch that you want to use for updating, ie. "prerelease" or "public", but do not specify arguments like "-beta")
 RUST_START_MODE (DEFAULT: "0" - Determines if the server should update and then start (0), only update (1) or only start (2))
+STEAMCMD_RETRY_DELAY (DEFAULT: "60" - Seconds to wait before exiting when the boot-time game update fails; see below)
 RUST_OXIDE_ENABLED (DEFAULT: "0" - Set to 1 to automatically install the latest version of Oxide)
 RUST_OXIDE_UPDATE_ON_BOOT (DEFAULT: "1" - Set to 0 to disable automatic update of Oxide on boot)
 RUST_RCON_SECURE_WEBSOCKET (DEFAULT: "0" - Set to 1 to enable secure websocket connections to the RCON web interface)
 RUST_HEARTBEAT (DEFAULT: "0" - Set to 1 to enable the heartbeat service which will forcibly quit the server if it becomes unresponsive to queries)
 ```
+
+## When the game update fails at boot
+
+The container updates Rust with steamcmd on every start. steamcmd exits 0 even when the
+update failed — on 2026-09-03 it printed `Error! App '258550' state is 0x486 after update
+job.` because Facepunch's monthly depot was mid-rollout at the moment the server restarted.
+The old script carried on, installed an Oxide built for the new Rust over the old one, and
+`RustDedicated` hung at boot. A hang is not an exit, so `restart: unless-stopped` never
+fired, and the server stayed down until someone noticed.
+
+Now the start script accepts only steamcmd's own `Success! App '258550' fully installed`
+line. Anything else waits `STEAMCMD_RETRY_DELAY` seconds and exits 1 before Oxide is
+touched, so a container restart policy (`unless-stopped` or `always`) retries until Steam
+serves the update. Restarting a wipe or maintenance window into the first minutes of a
+Facepunch release now costs a few restart loops instead of an outage.
+
+If you run the game with your own wrapper instead of this image, it needs the same rule:
+a failed update must exit non-zero, not launch the stale build.
