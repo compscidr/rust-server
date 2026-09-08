@@ -59,6 +59,7 @@ RUST_SERVER_PORT (DEFAULT: "" - Rust server port 28015 if left blank or numeric 
 RUST_SERVER_QUERYPORT (DEFAULT: "" - Rust server query port 28016 if left blank or numeric value)
 RUST_SERVER_SEED (DEFAULT: "12345" - The server map seed, must be an integer)
 RUST_SERVER_WORLDSIZE (DEFAULT: "3500" - The map size, must be an integer)
+RUST_SERVER_LEVELURL (DEFAULT: "" - An URL pointing towards a custom map. When using this RUST_SERVER_SEED and RUST_SERVER_WORLDSIZE are ignored.)
 RUST_SERVER_NAME (DEFAULT: "Rust Server [DOCKER]" - The publicly visible server name)
 RUST_SERVER_MAXPLAYERS (DEFAULT: "500" - Maximum players on the server, must be an integer)
 RUST_SERVER_DESCRIPTION (DEFAULT: "This is a Rust server running inside a Docker container!" - The publicly visible server description)
