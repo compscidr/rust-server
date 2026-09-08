@@ -4,10 +4,21 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
+  test:
+    name: Start script tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash test/install_or_update_test.sh
+
   build-and-publish:
     name: Build and Publish Docker Image
+    needs: test
+    # PRs run the tests only; the image is published from main.
+    if: github.event_name == 'push'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repo
