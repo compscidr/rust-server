@@ -12,12 +12,16 @@ set -u
 cd "$(dirname "$0")/.."
 
 # $1: what the stub steamcmd prints. Returns install_or_update's exit status.
+# The text reaches the stub through the environment, not by being pasted into its source,
+# so quotes and $(...) in a future case are printed rather than evaluated.
 run() {
 	local stub
 	stub=$(mktemp)
-	printf 'echo "%s"\nexit 0\n' "$1" > "$stub"
+	cat > "$stub" <<'STUB'
+printf '%s\n' "$STUB_OUTPUT"
+STUB
 	(
-		export STEAMCMD_SH=$stub STEAMCMD_RETRY_DELAY=0
+		export STEAMCMD_SH=$stub STEAMCMD_RETRY_DELAY=0 STUB_OUTPUT=$1
 		eval "$(sed -n '/^install_or_update()/,/^}/p' start_rust.sh)"
 		install_or_update > /dev/null 2>&1
 	)

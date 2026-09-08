@@ -57,7 +57,7 @@ install_or_update()
 {
 	# Install Rust from install.txt
 	echo "Installing or updating Rust.. (this might take a while, be patient)"
-	bash "${STEAMCMD_SH:-/steamcmd/steamcmd.sh}" +runscript /app/install.txt | tee /tmp/steamcmd_update.log
+	bash "${STEAMCMD_SH:-/steamcmd/steamcmd.sh}" +runscript /app/install.txt 2>&1 | tee /tmp/steamcmd_update.log
 
 	# Terminate unless steamcmd reported a successful install (also printed when already up to date)
 	if ! grep -q "Success! App '258550' fully installed" /tmp/steamcmd_update.log; then
