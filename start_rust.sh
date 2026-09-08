@@ -245,8 +245,15 @@ add_argument_pair ARGUMENTS "+server.port" "RUST_SERVER_PORT"
 add_argument_pair ARGUMENTS "+server.queryport" "RUST_SERVER_QUERYPORT"
 add_argument_pair ARGUMENTS "+server.identity" "RUST_SERVER_IDENTITY"
 
-add_argument_pair ARGUMENTS "+server.worldsize" "RUST_SERVER_WORLDSIZE"
-add_argument_pair ARGUMENTS "+server.seed" "RUST_SERVER_SEED"
+
+if [ -z "$RUST_SERVER_LEVELURL" ]; then
+       add_argument_pair ARGUMENTS "+server.worldsize" "RUST_SERVER_WORLDSIZE"
+       add_argument_pair ARGUMENTS "+server.seed" "RUST_SERVER_SEED"
+       echo "Generating procedural map.."
+else
+       add_argument_pair ARGUMENTS "+server.levelurl" "RUST_SERVER_LEVELURL"
+       echo "Using custom map.."
+fi
 
 add_argument_pair ARGUMENTS "+server.hostname" "RUST_SERVER_NAME"
 add_argument_pair ARGUMENTS "+server.url" "RUST_SERVER_URL"
